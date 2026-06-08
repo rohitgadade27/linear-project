@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Linear Admin — Contacts</title>
+    <meta name="description" content="Linear Admin Contacts Page - Manage your contacts efficiently." />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" sizes="16x16" />
+    <link rel="stylesheet" href="_next/static/css/5104b373026cb7fe.css" />
+    <link rel="stylesheet" href="_next/static/css/26ff12fc890462de.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --body: 207 54% 33%;
+            --body-image: url(img/misc/body.jpg);
+            --headings: 210 57% 26%;
+            --link: 209 88% 46%;
+            --scrollbar: 180 17% 64%;
+            --background: 176 21% 85%;
+            --foreground: #020817;
+            --card: hsla(0, 0%, 100%, .6);
+            --card-emphasis: hsla(0, 0%, 100%, .8);
+            --popover: 0 0% 100%;
+            --popover-foreground: #275982;
+            --popover-border: hsla(0, 0%, 100%, .75);
+            --popover-shadow: rgba(110, 140, 166, .15);
+            --tooltip: #fff;
+            --tooltip-border: hsla(0, 0%, 100%, .35);
+            --primary: 199 38% 39%;
+            --primary-foreground: 199 100% 93%;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #0f172a;
+            --muted: #6a95b9;
+            --muted-foreground: #6a95b9;
+            --accent: 187 30% 54%;
+            --destructive: #ef4444;
+            --destructive-foreground: #f8fafc;
+            --border: 202 70% 81%;
+            --input: rgba(115, 186, 226, .4);
+            --input-foreground: rgba(115, 186, 226, .6);
+            --ring: rgba(103, 165, 173, .102);
+        }
+
+        .dark {
+            --body: 207 100% 81%;
+            --body-image: url(img/misc/body-dark.png);
+            --headings: 207 100% 87%;
+            --link: 209 100% 66%;
+            --scrollbar: 206 96% 31%;
+            --background: 219 94% 13%;
+            --foreground: 210 40% 98%;
+            --card: rgba(0, 145, 255, .102);
+            --card-emphasis: rgba(0, 145, 255, .2);
+            --popover: 207 100% 25%;
+            --popover-foreground: 210 40% 98%;
+            --popover-border: rgba(0, 145, 255, .15);
+            --primary: 213 83% 41%;
+            --primary-foreground: 207 100% 87%;
+            --tooltip: #00518f;
+            --tooltip-border: rgba(0, 81, 143, .349);
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: #4e8dc1;
+            --muted-foreground: 207, 36%, 57%;
+            --accent: 206 100% 37%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 206 100% 34%;
+            --input: #004880;
+            --input-foreground: #0065b3;
+            --ring: rgba(0, 145, 255, .05);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: hsl(var(--background));
+            background-image: var(--body-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: hsl(var(--body));
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: hsl(var(--scrollbar)); border-radius: 4px; }
+        * { scrollbar-width: thin; scrollbar-color: hsl(var(--scrollbar)) transparent; }
+
+        a { color: inherit; text-decoration: none; }
+        button { cursor: pointer; background: transparent; border: none; padding: 0; font-family: inherit; font-size: inherit; color: inherit; }
+        ul, ol { list-style: none; margin: 0; padding: 0; }
+        img, svg { display: block; max-width: 100%; }
+        input, textarea { font-family: inherit; color: inherit; }
+
+        /* ── Color helpers ── */
+        .text-headings { color: hsl(var(--headings)); }
+        .text-muted { color: var(--muted); }
+        .text-body { color: hsl(var(--body)); }
+        .bg-card { background: var(--card); }
+        .bg-accent { background: hsl(var(--accent)); }
+        .border-border { border-color: hsl(var(--border)); }
+
+        /* ═══════════════════════════════════════
+           LAYOUT
+        ═══════════════════════════════════════ */
+
+        /* Left main sidebar (icons + nav) */
+        .main-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 100%;
+            width: 4.25rem;
+            z-index: 12;
+            transition: width .3s ease, background .3s ease, border .3s ease, box-shadow .3s ease;
+            overflow: hidden;
+            white-space: nowrap;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .main-sidebar:hover {
+            width: 15rem;
+            background: hsla(var(--popover), .25);
+            border-right: 1px solid hsla(var(--popover-border));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px var(--popover-shadow);
+        }
+
+        .sidebar-inner { height: 100%; padding: .5rem; overflow-y: auto; }
+
+        .sidebar-logo { display: flex; align-items: center; margin: 1rem; }
+        .sidebar-logo-text { opacity: 0; transition: opacity .3s; }
+        .main-sidebar:hover .sidebar-logo-text { opacity: 1; }
+
+        .sidebar-section-label {
+            padding: .75rem .75rem .5rem;
+            font-size: .7rem;
+            color: var(--muted);
+        }
+        .sidebar-section-label .dots {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-top: -1.75rem;
+            padding-left: .125rem;
+            display: block;
+        }
+        .sidebar-section-label .label-text {
+            display: block;
+            opacity: 0;
+            font-size: .7rem;
+            transition: opacity .3s;
+        }
+        .main-sidebar:hover .sidebar-section-label .dots { display: none; }
+        .main-sidebar:hover .sidebar-section-label .label-text { opacity: 1; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: .5rem .75rem;
+            border-radius: 9999px;
+            transition: color .3s;
+            position: relative;
+            margin: .125rem 0;
+        }
+        .nav-link svg { flex-shrink: 0; margin-right: .625rem; min-width: 18px; }
+        .nav-link .link-label { opacity: 0; transition: opacity .3s; white-space: nowrap; }
+        .main-sidebar:hover .nav-link .link-label { opacity: 1; }
+        .nav-link:hover { color: hsl(var(--headings)); }
+        .nav-link:hover .nav-highlight,
+        .nav-link.active .nav-highlight {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .nav-highlight {
+            position: absolute;
+            inset: 1px;
+            z-index: -1;
+            border-radius: 9999px;
+            background: linear-gradient(to right, rgba(0,145,255,.25), rgba(0,145,255,.05));
+            box-shadow: 0 0 0 3px rgba(0,145,255,.05);
+            opacity: 0;
+            transform: scale(.9);
+            transition: all .3s;
+        }
+        .nav-link.active { color: #0398ff; }
+
+        /* Right icon bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0; right: .25rem;
+            top: .5rem;
+            z-index: 8;
+            width: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            gap: .5rem;
+            padding: .25rem 0;
+        }
+        .nav-bar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 9999px;
+            transition: background .3s, box-shadow .3s;
+        }
+        .nav-bar-btn:hover {
+            background: rgba(0,145,255,.15);
+            box-shadow: 0 0 0 3px rgba(0,145,255,.07);
+        }
+        .nav-bar-btn img { width: 2rem; height: 2rem; border-radius: 9999px; }
+        .nav-bar-btn svg { width: 1.25rem; height: 1.25rem; }
+        .ping-dot {
+            position: absolute;
+            width: 1.25rem; height: 1.25rem;
+            border-radius: 9999px;
+            border: 1px solid #ef4444;
+            animation: ping 1.5s infinite;
+        }
+        @keyframes ping {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Main content area */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+            padding: 0 .75rem;
+            padding-right: 4.5rem;
+            padding-left: 4.25rem;
+            transition: padding .3s;
+            padding-bottom: .75rem;
+        }
+
+        /* Top header bar */
+        .page-header {
+            display: flex;
+            align-items: center;
+            height: 3.5rem;
+            padding: 0 .75rem;
+            flex-shrink: 0;
+        }
+        .page-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: hsl(var(--headings));
+            margin-right: 2rem;
+            line-height: 1;
+        }
+        .header-search {
+            position: relative;
+            flex: 1;
+            max-width: 24rem;
+        }
+        .header-search input {
+            width: 100%;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255,255,255,.2);
+            background: rgba(0,145,255,.05);
+            padding: 0 2.5rem;
+            font-size: .875rem;
+            transition: border .2s, box-shadow .2s;
+            outline: none;
+        }
+        .header-search input:focus {
+            border-color: hsl(var(--border));
+            box-shadow: 0 0 0 3px rgba(0,145,255,.1);
+        }
+        .header-search input::placeholder { color: hsl(var(--body)); opacity: .7; }
+        .header-search svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); opacity: .7; width: 1rem; height: 1rem; }
+        .header-spacer { flex: 1; }
+        .header-actions { display: flex; gap: .25rem; margin-left: 1rem; align-items: center; }
+        /* Profile avatar in header */
+        .header-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(0,145,255,.4);
+            box-shadow: 0 0 0 3px rgba(0,145,255,.15);
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+            margin-left: .5rem;
+            flex-shrink: 0;
+        }
+        .header-avatar:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 0 4px rgba(0,145,255,.3);
+        }
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem; height: 2.25rem;
+            border-radius: .375rem;
+            color: hsl(var(--headings));
+            transition: background .2s, box-shadow .2s;
+        }
+        .icon-btn:hover {
+            background: rgba(255,255,255,.1);
+            box-shadow: 0 0 0 3px rgba(255,255,255,.1);
+        }
+        .dark .icon-btn:hover {
+            background: rgba(0,145,255,.15);
+            box-shadow: 0 0 0 3px rgba(0,145,255,.07);
+        }
+        .icon-btn svg { width: 1.125rem; height: 1.125rem; }
+
+        .create-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: 0 1rem;
+            height: 2.25rem;
+            border-radius: 9999px;
+            border: 1.5px solid #3b82f6;
+            color: #3b82f6;
+            font-size: .875rem;
+            margin-left: .75rem;
+            transition: background .2s, box-shadow .2s;
+        }
+        .create-btn:hover { background: rgba(59,130,246,.05); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
+        .create-btn svg { width: 1.0625rem; height: 1.0625rem; }
+
+        /* Content body (3-panel layout) */
+        .content-body {
+            position: relative;
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            border-radius: .75rem;
+            border: 7px solid transparent;
+            background: rgba(0,145,255,.05);
+            box-shadow: 0 0 0 1px rgb(0,145,255,.15);
+            gap: 0;
+        }
+
+        /* ─── Panel 1: Contact category sidebar ─── */
+        .contacts-sidebar {
+            width: 15rem;
+            flex-shrink: 0;
+            border-right: 1px solid rgba(0,145,255,.1);
+            overflow-y: auto;
+            padding: 1.5rem .75rem 1rem;
+        }
+        .cat-group-label {
+            padding: .375rem .625rem;
+            font-size: .7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .cat-link {
+            display: flex;
+            align-items: center;
+            padding: .625rem .625rem;
+            border-radius: .375rem;
+            color: hsl(var(--headings));
+            margin-bottom: .125rem;
+            transition: background .2s;
+            font-size: .875rem;
+        }
+        .cat-link:hover { background: rgba(0,145,255,.08); }
+        .cat-link.active { background: rgba(0,145,255,.15); }
+        .cat-link svg { margin-right: .75rem; flex-shrink: 0; width: 1rem; height: 1rem; }
+        .cat-link span { flex: 1; }
+
+        /* ─── Panel 2: Contact list ─── */
+        .contacts-list-panel {
+            width: 20rem;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(0,145,255,.1);
+            overflow: hidden;
+        }
+        .list-header {
+            display: flex;
+            align-items: center;
+            height: 2.75rem;
+            padding: 0 .75rem;
+            flex-shrink: 0;
+            color: hsl(var(--headings));
+            font-size: .875rem;
+        }
+        .list-header .title { flex: 1; }
+        .list-header button { display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: .375rem; transition: background .2s; }
+        .list-header button:hover { background: rgba(0,145,255,.15); }
+        .list-header button svg { width: 1rem; height: 1rem; }
+
+        .contacts-scroll { flex: 1; overflow-y: auto; padding: 0 .25rem; }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: .625rem .75rem;
+            border-radius: .375rem;
+            margin-bottom: .125rem;
+            cursor: pointer;
+            transition: background .2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .contact-item:hover { background: rgba(0,145,255,.08); }
+        .contact-item.active { background: rgba(0,145,255,.15); }
+        .contact-avatar {
+            width: 2.25rem; height: 2.25rem;
+            border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: .75rem;
+            color: #fff;
+        }
+        .contact-avatar.accent-bg { background: hsl(var(--accent)); }
+        .contact-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            object-fit: cover;
+            display: block;
+        }
+        .contact-meta { flex: 1; min-width: 0; }
+        .contact-name { font-size: .875rem; color: hsl(var(--headings)); margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .contact-email { font-size: .7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ─── Panel 3: Contact detail ─── */
+        .contact-detail {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+        }
+        .detail-header {
+            display: flex;
+            align-items: center;
+            height: 2.75rem;
+            padding: 0 .75rem;
+            flex-shrink: 0;
+        }
+        .detail-header .update-btn, .detail-header .delete-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: 0 1rem;
+            height: 2.5rem;
+            border-radius: .375rem;
+            font-size: .875rem;
+            color: hsl(var(--headings));
+            transition: background .2s;
+        }
+        .detail-header .update-btn:hover, .detail-header .delete-btn:hover { background: rgba(0,145,255,.15); }
+        .detail-header .update-btn svg, .detail-header .delete-btn svg { width: .875rem; height: .875rem; }
+        .detail-header .ms-auto { margin-left: auto; display: flex; }
+
+        .detail-scroll { flex: 1; overflow-y: auto; padding: .5rem; }
+
+        .detail-card {
+            max-width: 28rem;
+            width: 100%;
+            margin: 1.25rem auto 0;
+            background: var(--card);
+            border-radius: .5rem;
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: rgba(0,145,255,.08);
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .profile-img {
+            width: 8rem; height: 8rem;
+            border-radius: 9999px;
+            margin: 0 auto .75rem;
+            object-fit: cover;
+        }
+        .profile-name {
+            font-size: .9375rem;
+            font-weight: 500;
+            color: hsl(var(--headings));
+            margin-bottom: .25rem;
+        }
+        .profile-title { font-size: .875rem; color: hsl(var(--body)); }
+
+        .detail-list { padding: .75rem; }
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(0,145,255,.1);
+        }
+        .detail-row:first-child { border-top: none; padding-top: 0; }
+        .detail-icon {
+            width: 2.25rem; height: 2.25rem;
+            border-radius: 9999px;
+            background: hsl(var(--accent));
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1rem;
+        }
+        .dark .detail-icon { color: #000; }
+        .detail-icon svg { width: 1.125rem; height: 1.125rem; }
+        .detail-info { flex: 1; display: flex; align-items: flex-start; padding: 1rem 0; }
+        .detail-info-inner { flex: 1; }
+        .detail-label { font-size: .7rem; color: var(--muted); margin-bottom: .125rem; }
+        .detail-value { font-size: .875rem; color: hsl(var(--headings)); line-height: 1.5; }
+        .copy-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 2.25rem; height: 2.25rem;
+            border-radius: .375rem;
+            transition: background .2s;
+        }
+        .copy-btn:hover { background: rgba(0,145,255,.15); }
+        .copy-btn svg { width: 1rem; height: 1rem; }
+
+        /* ── Animate pulse utility ── */
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+        .animate-pulse { animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite; }
+
+        /* ── Theme toggle ── */
+        .moon-icon { display: block; }
+        .sun-icon { display: none; }
+        .dark .moon-icon { display: none; }
+        .dark .sun-icon { display: block; }
+
+        /* Responsive: hide contacts sidebar on small screens */
+        @media (max-width: 1024px) {
+            .contacts-sidebar { display: none; }
+            .contacts-list-panel { width: 16rem; }
+        }
+        @media (max-width: 768px) {
+            .contacts-list-panel { width: 100%; position: absolute; inset: 0; z-index: 5; }
+            .contact-detail { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ═══════ LEFT MAIN SIDEBAR ═══════ -->
+    <aside class="main-sidebar">
+        <div class="sidebar-inner">
+            <!-- Logo -->
+            <a class="sidebar-logo" href="index.html">
+                <!-- Dot logo icon -->
+                <svg width="18" height="18" fill="none" style="flex-shrink:0; margin-right:.75rem;">
+                    <circle cx="2" cy="2" r="2" fill="#0660B8"/>
+                    <circle cx="9" cy="2" r="2" fill="#0660B8"/>
+                    <circle cx="16" cy="2" r="2" fill="#22A279"/>
+                    <circle cx="2" cy="9" r="2" fill="#0660B8"/>
+                    <circle cx="16" cy="9" r="2" fill="#22A279"/>
+                    <circle cx="2" cy="16" r="2" fill="#22A279"/>
+                    <circle cx="9" cy="16" r="2" fill="#22A279"/>
+                    <circle cx="16" cy="16" r="2" fill="#22A279"/>
+                </svg>
+                <svg width="94" height="14" fill="none" class="sidebar-logo-text">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="-.5" y1="9.48" x2="92.291" y2="-.197" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0762b7"/>
+                            <stop offset="1" stop-color="#22a279"/>
+                        </linearGradient>
+                    </defs>
+                    <text x="0" y="12" font-family="Inter,sans-serif" font-weight="700" font-size="11" fill="url(#logoGrad)" letter-spacing="-.5">Linear Admin</text>
+                </svg>
+            </a>
+
+            <!-- Dashboards -->
+            <div class="sidebar-section-label">
+                <span class="label-text">Dashboards</span>
+                <span class="dots">...</span>
+            </div>
+            <ul>
+                <li>
+                    <a class="nav-link" href="index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        <span class="link-label">E-Commerce</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="crm.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><rect width="18" height="18" x="3" y="4" rx="2"/><circle cx="12" cy="10" r="2"/><line x1="8" x2="8" y1="2" y2="4"/><line x1="16" x2="16" y1="2" y2="4"/></svg>
+                        <span class="link-label">CRM</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="analytics.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/><path d="M7 3.34V5a3 3 0 0 0 3 3v0a2 2 0 0 1 2 2v0c0 1.1.9 2 2 2v0a2 2 0 0 0 2-2v0c0-1.1.9-2 2-2h3.17"/><path d="M11 21.95V18a2 2 0 0 0-2-2v0a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"/><circle cx="12" cy="12" r="10"/></svg>
+                        <span class="link-label">Analytics</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="project-management.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 7v7"/><path d="M12 7v4"/><path d="M16 7v9"/></svg>
+                        <span class="link-label">Project Management</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="email-marketing.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>
+                        <span class="link-label">Email Marketing</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Application Views -->
+            <div class="sidebar-section-label" style="margin-top:.5rem;">
+                <span class="label-text">Application Views</span>
+                <span class="dots">...</span>
+            </div>
+            <ul>
+                <li>
+                    <a class="nav-link" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg>
+                        <span class="link-label">User</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="file-manager.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg>
+                        <span class="link-label">File Manager</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="contacts-standalone.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>
+                        <span class="link-label">Contacts</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="mail.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <span class="link-label">Mail</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="messages.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                        <span class="link-label">Messages</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="todo.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                        <span class="link-label">Todo Lists</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="calendar.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        <span class="link-label">Calendar</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Miscellaneous -->
+            <div class="sidebar-section-label" style="margin-top:.5rem;">
+                <span class="label-text">Miscellaneous</span>
+                <span class="dots">...</span>
+            </div>
+            <ul>
+                <li>
+                    <a class="nav-link" href="forms.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                        <span class="link-label">Forms</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="charts.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                        <span class="link-label">Charts</span>
+                        <i class="nav-highlight"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- ═══════ RIGHT NAV BAR ═══════ -->
+    <aside class="nav-bar">
+
+        <button class="nav-bar-btn" title="Language">
+            <img src="img/flags/england.svg" alt="EN" style="width:1.5rem;height:1.5rem;border-radius:9999px;" />
+        </button>
+        <button class="nav-bar-btn" title="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-bar-btn" style="position:relative;" title="Notifications">
+            <span class="ping-dot"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 14.9C20.2 16.4 21 17 21 17H3s3-2 3-9c0-3.3 2.7-6 6-6 .7 0 1.3.1 1.9.3"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><circle cx="18" cy="8" r="3"/></svg>
+        </button>
+        <button class="nav-bar-btn" title="Tasks">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </button>
+        <button class="nav-bar-btn" id="themeToggle" title="Toggle theme" onclick="toggleTheme()">
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+    </aside>
+
+    <!-- ═══════ MAIN CONTENT ═══════ -->
+    <div class="content-wrapper">
+        <!-- Page header -->
+        <header class="page-header">
+            <h2 class="page-title">Contacts</h2>
+            <div class="header-search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--body))"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" placeholder="Search Contacts..." id="contactSearch" />
+            </div>
+            <i class="header-spacer"></i>
+            <div class="header-actions">
+                <button class="icon-btn" title="Info">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                </button>
+                <button class="icon-btn" title="Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="icon-btn" title="More">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M17 12h.01"/><path d="M12 12h.01"/><path d="M7 12h.01"/></svg>
+                </button>
+            </div>
+            <img
+                src="img/profile.jpg"
+                alt="Profile"
+                class="header-avatar"
+                title="Profile"
+            />
+            <button class="create-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Create Contact
+            </button>
+        </header>
+
+        <!-- Three-panel content area -->
+        <div class="content-body">
+
+            <!-- Panel 1: Category sidebar -->
+            <aside class="contacts-sidebar">
+                <ul>
+                    <li class="cat-group-label" style="margin-bottom:.25rem;">My Contacts</li>
+                    <ul>
+                        <li><a class="cat-link active" href="contacts-standalone.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><rect width="18" height="18" x="3" y="4" rx="2"/><circle cx="12" cy="10" r="2"/><line x1="8" x2="8" y1="2" y2="4"/><line x1="16" x2="16" y1="2" y2="4"/></svg>
+                            <span>All Contacts</span>
+                        </a></li>
+                        <li><a class="cat-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                            <span>Favorites</span>
+                        </a></li>
+                        <li><a class="cat-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Frequently Contacted</span>
+                        </a></li>
+                        <li><a class="cat-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16.02 12 5.48 3.13a1 1 0 0 1 0 1.74L13 21.74a2 2 0 0 1-2 0l-8.5-4.87a1 1 0 0 1 0-1.74L7.98 12"/><path d="M13 13.74a2 2 0 0 1-2 0L2.5 8.87a1 1 0 0 1 0-1.74L11 2.26a2 2 0 0 1 2 0l8.5 4.87a1 1 0 0 1 0 1.74Z"/></svg>
+                            <span>Duplicates</span>
+                        </a></li>
+                        <li><a class="cat-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            <span>Deleted Contacts</span>
+                        </a></li>
+                    </ul>
+
+                    <li class="cat-group-label" style="margin-top:1.25rem; margin-bottom:.25rem;">Groups</li>
+                    <ul>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg><span>Most Important</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg><span>Work</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg><span>Family</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg><span>Projects</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#d946ef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg><span>Recent Leads</span></a></li>
+                    </ul>
+
+                    <li class="cat-group-label" style="margin-top:1.25rem; margin-bottom:.25rem;">Actions</li>
+                    <ul>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M8 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4"/></svg><span>Import</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span>Export</span></a></li>
+                        <li><a class="cat-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg><span>Print</span></a></li>
+                    </ul>
+                </ul>
+            </aside>
+
+            <!-- Panel 2: Contact list -->
+            <div class="contacts-list-panel">
+                <header class="list-header">
+                    <span class="title">All Contacts</span>
+                    <button title="Sort">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="M20 8h-5"/><path d="M15 10V6.5a2.5 2.5 0 0 1 5 0V10"/><path d="M15 14h5l-5 6h5"/></svg>
+                    </button>
+                </header>
+                <div class="contacts-scroll" id="contactsList">
+                    <!-- Contact items -->
+                    <a class="contact-item active" href="?contact=3" data-contact="3">
+                        <div class="contact-avatar accent-bg">A</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Andre Allison</div>
+                            <div class="contact-email">andre-allison@allison.hn</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=2" data-contact="2">
+                        <div class="contact-avatar accent-bg">A</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Allion Murphy</div>
+                            <div class="contact-email">allion-murphy@aool.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=3" data-contact="3">
+                        <div class="contact-avatar" style="background:#f97316;">A</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Ann Skinner</div>
+                            <div class="contact-email">ann-skinner@shotmail.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=4" data-contact="4">
+                        <div class="contact-avatar" style="background:#14b8a6;">B</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Brandon Leonard</div>
+                            <div class="contact-email">brandon-leonard@aahoo.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=5" data-contact="5">
+                        <div class="contact-avatar accent-bg">B</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Boris Ramirez</div>
+                            <div class="contact-email">boris-ramiraz@aahoo.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=6" data-contact="6">
+                        <div class="contact-avatar accent-bg">C</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Carmen Erickson</div>
+                            <div class="contact-email">carmen-erickson@aool.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=7" data-contact="7">
+                        <div class="contact-avatar accent-bg">C</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Carroll Hunt</div>
+                            <div class="contact-email">carroll-hunt@hunt.hn</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=8" data-contact="8">
+                        <div class="contact-avatar" style="background:#3b82f6;">E</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Ellen Boone</div>
+                            <div class="contact-email">ellen-boone@amail.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=9" data-contact="9">
+                        <div class="contact-avatar accent-bg">E</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Elbert Elliott</div>
+                            <div class="contact-email">elbert-elliott@liive.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=10" data-contact="10">
+                        <div class="contact-avatar" style="background:#06b6d4;">E</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Emanuel Owens</div>
+                            <div class="contact-email">emanuel-owens@hiive.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=11" data-contact="11">
+                        <div class="contact-avatar" style="background:#ef4444;">F</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Faith Alexander</div>
+                            <div class="contact-email">faith-alexander@houtlook.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=12" data-contact="12">
+                        <div class="contact-avatar" style="background:#22c55e;">J</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Joan Hernandez</div>
+                            <div class="contact-email">joan-hernandez@mails.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=13" data-contact="13">
+                        <div class="contact-avatar accent-bg">M</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Marsha Swanson</div>
+                            <div class="contact-email">marsha-swanson@swann.com.hn</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=14" data-contact="14">
+                        <div class="contact-avatar accent-bg">N</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Nadine Guerrero</div>
+                            <div class="contact-email">nadine-guerrero@aool.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=15" data-contact="15">
+                        <div class="contact-avatar" style="background:#a855f7;">N</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Natasha Mckenzie</div>
+                            <div class="contact-email">natasha-mckenzie@benn.ln</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=16" data-contact="16">
+                        <div class="contact-avatar accent-bg">R</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Rodney Harrison</div>
+                            <div class="contact-email">rodney-harrison@rodd.com</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=17" data-contact="17">
+                        <div class="contact-avatar accent-bg">S</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Santos Underwood</div>
+                            <div class="contact-email">santos-underwood@santos.sn</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="?contact=18" data-contact="18">
+                        <div class="contact-avatar" style="background:#ec4899;">S</div>
+                        <div class="contact-meta">
+                            <div class="contact-name">Salvador Flowers</div>
+                            <div class="contact-email">salvador-flowers@salv.fl</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Panel 3: Contact detail (dynamic) -->
+            <div class="contact-detail" id="contactDetail">
+                <header class="detail-header">
+                    <div class="ms-auto">
+                        <button class="update-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
+                            Update
+                        </button>
+                        <button class="delete-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+                            Delete
+                        </button>
+                    </div>
+                </header>
+                <div class="detail-scroll">
+                    <div class="detail-card" id="detailCard"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ── Contacts data ──
+        const CONTACTS = {
+            1:  { name:'Andre Allison',    title:'Investor Implementation Analyst, Harvey Inc',     phone:'303-570-0941', home:'543-769-0002', email:'andre-allison@allison.hn',       msg:'@andreallison',    addr:'866 Romrog Way, Curtis, 69025, Nebraska',           notes:'Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus.' },
+            2:  { name:'Allion Murphy',    title:'Senior Marketing Coordinator, Aool Corp',          phone:'412-334-8821', home:'412-334-9910', email:'allion-murphy@aool.com',          msg:'@allionmurphy',    addr:'22 Baker Street, Chicago, 60601, Illinois',           notes:'Pellentesque habitant morbi tristique senectus et netus.' },
+            3:  { name:'Ann Skinner',      title:'Product Designer, ShotMail Ltd',                   phone:'555-201-4455', home:'555-201-7766', email:'ann-skinner@shotmail.com',        msg:'@annskinner',      addr:'14 Elm Ave, Austin, 73301, Texas',                    notes:'Cras mattis consectetur purus sit amet fermentum.' },
+            4:  { name:'Brandon Leonard',  title:'Software Engineer, Aahoo Technologies',             phone:'720-880-1234', home:'720-880-5678', email:'brandon-leonard@aahoo.com',      msg:'@brandonleonard',  addr:'99 Oak Lane, Denver, 80201, Colorado',                notes:'Donec sed odio dui. Cras justo odio, dapibus ac facilisis.' },
+            5:  { name:'Boris Ramirez',    title:'Financial Analyst, Aahoo Finance',                 phone:'305-777-3210', home:'305-777-6540', email:'boris-ramiraz@aahoo.com',        msg:'@borisramirez',    addr:'501 Brickell Ave, Miami, 33101, Florida',             notes:'Etiam porta sem malesuada magna mollis euismod.' },
+            6:  { name:'Carmen Erickson', title:'UX Researcher, Aool Design Studio',                 phone:'415-623-9988', home:'415-623-1122', email:'carmen-erickson@aool.com',       msg:'@carmenerickson',  addr:'88 Market St, San Francisco, 94102, California',      notes:'Fusce dapibus, tellus ac cursus commodo, tortor mauris.' },
+            7:  { name:'Carroll Hunt',     title:'Operations Manager, Hunt Holdings',                phone:'212-500-4400', home:'212-500-8800', email:'carroll-hunt@hunt.hn',            msg:'@carrollhunt',     addr:'350 Fifth Ave, New York, 10118, New York',            notes:'Nullam quis risus eget urna mollis ornare vel eu leo.' },
+            8:  { name:'Ellen Boone',      title:'HR Director, Amail Solutions',                     phone:'617-330-2200', home:'617-330-6600', email:'ellen-boone@amail.com',           msg:'@ellenboone',      addr:'77 Congress St, Boston, 02101, Massachusetts',        notes:'Vestibulum id ligula porta felis euismod semper.' },
+            9:  { name:'Elbert Elliott',   title:'Cloud Architect, Liive Systems',                   phone:'503-440-1010', home:'503-440-3030', email:'elbert-elliott@liive.com',        msg:'@elbertelliott',   addr:'200 SW Market St, Portland, 97201, Oregon',           notes:'Cum sociis natoque penatibus et magnis dis parturient.' },
+            10: { name:'Emanuel Owens',    title:'DevOps Lead, Hiive Networks',                      phone:'206-555-7890', home:'206-555-4560', email:'emanuel-owens@hiive.com',         msg:'@emanuelowens',    addr:'1000 2nd Ave, Seattle, 98101, Washington',            notes:'Integer posuere erat a ante venenatis dapibus.' },
+            11: { name:'Faith Alexander',  title:'Brand Strategist, Houtlook Media',                 phone:'404-210-3300', home:'404-210-6600', email:'faith-alexander@houtlook.com',    msg:'@faithalexander',  addr:'333 Peachtree Rd, Atlanta, 30308, Georgia',           notes:'Aenean lacinia bibendum nulla sed consectetur.' },
+            12: { name:'Joan Hernandez',   title:'Content Manager, Mails Publishing',                phone:'512-888-2200', home:'512-888-4400', email:'joan-hernandez@mails.com',        msg:'@joanhernandez',   addr:'221 Congress Ave, Austin, 78701, Texas',              notes:'Donec ullamcorper nulla non metus auctor fringilla.' },
+            13: { name:'Marsha Swanson',   title:'Account Executive, Swann Global',                  phone:'702-333-5500', home:'702-333-7700', email:'marsha-swanson@swann.com.hn',    msg:'@marshaswanson',   addr:'3600 Las Vegas Blvd, Las Vegas, 89109, Nevada',       notes:'Maecenas faucibus mollis interdum. Sed posuere consectetur.' },
+            14: { name:'Nadine Guerrero',  title:'Project Manager, Aool Ventures',                   phone:'469-700-1100', home:'469-700-3300', email:'nadine-guerrero@aool.com',       msg:'@nadineguerrero',  addr:'1500 Marilla St, Dallas, 75201, Texas',               notes:'Praesent commodo cursus magna, vel scelerisque nisl consectetur.' },
+            15: { name:'Natasha Mckenzie', title:'Legal Counsel, Benn & Associates',                 phone:'310-900-4400', home:'310-900-8800', email:'natasha-mckenzie@benn.ln',       msg:'@natashamckenzie', addr:'400 S Hope St, Los Angeles, 90071, California',       notes:'Cum sociis natoque penatibus et magnis dis parturient montes.' },
+            16: { name:'Rodney Harrison',  title:'Sales Director, Rodd Enterprises',                 phone:'813-400-2200', home:'813-400-6600', email:'rodney-harrison@rodd.com',        msg:'@rodneyharrison',  addr:'100 N Tampa St, Tampa, 33602, Florida',               notes:'Cras mattis consectetur purus sit amet fermentum.' },
+            17: { name:'Santos Underwood', title:'CTO, Santos Systems',                              phone:'602-500-1100', home:'602-500-3300', email:'santos-underwood@santos.sn',     msg:'@santosunderwood', addr:'201 E Washington St, Phoenix, 85004, Arizona',        notes:'Duis mollis, est non commodo luctus, nisi erat porttitor.' },
+            18: { name:'Salvador Flowers', title:'Creative Director, Salv Studio',                   phone:'305-600-2200', home:'305-600-4400', email:'salvador-flowers@salv.fl',       msg:'@salvadorflowers', addr:'1100 Brickell Blvd, Miami, 33131, Florida',           notes:'Nullam id dolor id nibh ultricies vehicula ut id elit.' }
+        };
+
+        // ── SVG icons ──
+        const SVG = {
+            phone:   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>',
+            hometel: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+            email:   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+            msg:     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+            addr:    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+            notes:   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>',
+            copy:    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>'
+        };
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text; document.body.appendChild(ta);
+                ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta);
+            });
+        }
+
+        function row(icon, label, value, border, extraStyle) {
+            const b = border ? 'border-top:1px solid rgba(0,145,255,.1);' : '';
+            const es = extraStyle || '';
+            return `<div class="detail-row">
+                <div class="detail-icon">${SVG[icon]}</div>
+                <div class="detail-info" style="${b}${es}">
+                    <div class="detail-info-inner">
+                        <div class="detail-label">${label}</div>
+                        <div class="detail-value" style="${es.includes('line-height') ? 'line-height:1.6;' : ''}">${value}</div>
+                    </div>
+                    <button class="copy-btn" title="Copy" onclick="copyText('${value.replace(/'/g, "\\'")}')"
+                        style="${es.includes('flex-start') ? 'margin-top:0;' : ''}">${SVG.copy}</button>
+                </div>
+            </div>`;
+        }
+
+        function renderContact(id) {
+            const c = CONTACTS[id];
+            if (!c) return;
+            const imgSrc = `img/contacts/${id}.jpg`;
+            document.getElementById('detailCard').innerHTML = `
+                <div class="profile-header">
+                    <img class="profile-img" src="${imgSrc}" alt="${c.name}"
+                         onerror="this.style.display='none'" />
+                    <div class="profile-name">${c.name}</div>
+                    <div class="profile-title">${c.title}</div>
+                </div>
+                <div class="detail-list">
+                    ${row('phone',   'Mobile Phone',  c.phone, false, '')}
+                    ${row('hometel', 'Home Phone',    c.home,  true,  '')}
+                    ${row('email',   'Email Address', c.email, true,  '')}
+                    ${row('msg',     'Message',       c.msg,   true,  '')}
+                    ${row('addr',    'Address',       c.addr,  true,  '')}
+                    ${row('notes',   'Notes',         c.notes, true,  'align-items:flex-start;')}
+                </div>`;
+            // update active state in list
+            document.querySelectorAll('.contact-item').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.contact) === id);
+            });
+        }
+
+        // ── Theme toggle ──
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // ── Apply saved theme ──
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const html = document.documentElement;
+            if (saved === 'light') html.classList.remove('dark');
+            else html.classList.add('dark');
+        })();
+
+        // ── Contact search ──
+        document.getElementById('contactSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('.contact-item').forEach(item => {
+                const name = item.querySelector('.contact-name').textContent.toLowerCase();
+                const email = item.querySelector('.contact-email').textContent.toLowerCase();
+                item.style.display = (name.includes(q) || email.includes(q)) ? '' : 'none';
+            });
+        });
+
+        // ── Click handler: update URL + render ──
+        document.getElementById('contactsList').addEventListener('click', function(e) {
+            const item = e.target.closest('.contact-item');
+            if (!item) return;
+            e.preventDefault();
+            const id = parseInt(item.dataset.contact);
+            history.pushState({}, '', `?contact=${id}`);
+            renderContact(id);
+        });
+
+        // ── Initial render from URL param (default: contact=14) ──
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('contact')) || 14;
+            renderContact(id);
+            // Replace letter avatars with photos in list
+            document.querySelectorAll('.contact-item').forEach(item => {
+                const cid = item.dataset.contact;
+                if (!cid) return;
+                const avatar = item.querySelector('.contact-avatar');
+                if (!avatar) return;
+                const img = new Image();
+                img.className = 'contact-avatar-img';
+                img.src = `img/contacts/${cid}.jpg`;
+                img.onload = () => {
+                    avatar.textContent = '';
+                    avatar.style.background = 'transparent';
+                    avatar.appendChild(img);
+                };
+            });
+        })();
+    </script>
+</body>
+</html>
