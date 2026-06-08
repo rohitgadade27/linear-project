@@ -683,6 +683,30 @@
                                                                 <script>
                                                                     self.__next_f.push([1, ""])
                                                                 </script>
+    <script>
+        // Fix broken Next.js image optimizer URLs on Vercel static export
+        const observer = new MutationObserver(() => {
+            document.querySelectorAll('img[src*="/_next/image?url="]').forEach(img => {
+                const urlParams = new URLSearchParams(img.src.split('?')[1]);
+                const realSrc = urlParams.get('url');
+                if (realSrc) {
+                    img.src = realSrc;
+                    img.srcset = realSrc;
+                    // Use the uploaded image for Andre
+                    if (realSrc.includes('3.jpg')) {
+                        img.src = '/img/contacts/andre_new.jpg';
+                        img.srcset = '/img/contacts/andre_new.jpg';
+                    }
+                    // Use the custom profile image for the top right
+                    if (realSrc.includes('2.jpg') && img.closest('aside')) {
+                        img.src = '/img/profile.jpg';
+                        img.srcset = '/img/profile.jpg';
+                    }
+                }
+            });
+        });
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+    </script>
 </body>
 
 </html>
